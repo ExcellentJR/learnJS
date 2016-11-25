@@ -1,3 +1,3 @@
 # learnJS
-loan calculator
+###loan calculator
 an example from 《javaScript权威指南》

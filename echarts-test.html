@@ -10,10 +10,14 @@
     <div id="bar" style="width: 600px;height: 400px;"></div>
     <div id="pie" style="width: 600px;height: 400px;"></div>
 </div>
+<div style="width: 100%;display: flex;">
+    <div id="scatter" style="width: 600px;height: 400px;"></div>
+</div>
 
 <script type="text/javascript">
     var myChart1 = echarts.init(document.getElementById("bar"));
     var myChart2 = echarts.init(document.getElementById("pie"));
+    var myChart3 = echarts.init(document.getElementById("scatter"));
 
     var option1 = {
         title:{
@@ -52,12 +56,12 @@
                     shadowBlur: 200,
                     shadowColor: 'rgba(0, 0, 0, 0.5)'
                 },
-                normal: {
-                    // 设置扇形的颜色
-                    color: '#c23531',
-                    shadowBlur: 200,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
+//                normal: {
+//                    // 设置扇形的颜色
+//                    color: '#c23531',
+//                    shadowBlur: 200,
+//                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+//                }
             },
             data:[
                 {value:400,name:'搜索引擎'},
@@ -94,11 +98,72 @@
             }
         }]
     };
+    var option3 = {
+        xAxis:{
+            type:'value'
+        },
+        yAxis:{
+            type:'value'
+        },
+        dataZoom:[
+            {// 这个dataZoom组件，默认控制x轴。
+                type:'slider',// 这个 dataZoom 组件是 slider 型 dataZoom 组件
+                start:10,// 左边在 10% 的位置。
+                end:60// 右边在 60% 的位置。
+            },
+            {   // 这个dataZoom组件，也控制x轴。
+                type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
+                start: 10,      // 左边在 10% 的位置。
+                end: 60         // 右边在 60% 的位置。
+            },
+            {
+                type: 'slider',
+                yAxisIndex: 0,
+                start: 30,
+                end: 80
+            },
+            {
+                type: 'inside',
+                yAxisIndex: 0,
+                start: 30,
+                end: 80
+            }
+        ],
+        series:[
+            {
+                type:'scatter', // 这是个『散点图』
+                itemStyle:{
+                    normal:{
+                        opacity:0.8
+                    }
+                },
+                symbolSize:function (val) {
+                    return val[2] * 40;
+                },
+                data: [["14.616","7.241","0.896"],["3.958","5.701","0.955"],["2.768","8.971","0.669"],["9.051","9.710","0.171"],["14.046","4.182","0.536"],["12.295","1.429","0.962"],["4.417","8.167","0.113"],["0.492","4.771","0.785"],["7.632","2.605","0.645"],["14.242","5.042","0.368"]]
+            }
+        ]
+    };
+
     myChart1.setOption(option1);
+    myChart1.on('click',function (params) {
+        window.open('http://www.baidu.com/s?wd='+encodeURIComponent(params.name));
+    });
+    // 图例开关的行为只会触发 legendselectchanged 事件
+    myChart1.on('legendselectchanged', function (params) {
+        // 获取点击图例的选中状态
+        var isSelected = params.selected[params.name];
+        // 在控制台中打印
+        console.log((isSelected ? '选中了' : '取消选中了') + '图例' + params.name);
+        // 打印所有图例的状态
+        console.log(params.selected);
+    });
 //    myChart2.setOption({
 //        backgroundColor:'#2c343c'
 //    });
+
     myChart2.setOption(option2);
+    myChart3.setOption(option3);
 </script>
 </body>
 </html>
